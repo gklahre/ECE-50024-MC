@@ -51,7 +51,7 @@ AUTOTUNE = tf.data.AUTOTUNE
 train_ds = training_data.cache().shuffle(500).prefetch(buffer_size = AUTOTUNE)
 val_ds = validation_data.cache().prefetch(buffer_size = AUTOTUNE)
 #normalization_layer = layers.Rescaling(1./255)
-"""
+
 data_aug = Sequential([
     
     tf.keras.layers.RandomFlip("horizontal", input_shape=(200, 200, 3)),
@@ -83,12 +83,15 @@ model = Sequential([
 model.compile(optimizer='adam',loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True), metrics=['accuracy'])
 
 model.summary()
+
+#This is for restarting training.
 """
 model = tf.keras.models.load_model('model_2_1.keras')
 model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(filepath='ch.m2.tf',monitor='val_accuracy',mode='max',save_best_only=True)
+"""
 
-epochs = 5
-history = model.fit(train_ds, validation_data=val_ds, epochs=epochs,callbacks=[model_checkpoint_callback])
+epochs = 35
+history = model.fit(train_ds, validation_data=val_ds, epochs=epochs)
 
 model.save('model_2_2.keras')
 
